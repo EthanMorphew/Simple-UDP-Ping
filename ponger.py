@@ -11,6 +11,9 @@ localSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 localSocket.bind((localIP, localPort))
 
 while True:
-    pingMessage, clientAddress = localSocket.recvfrom(1024)
-    if pingMessage.decode() == 'ping':
-        localSocket.sendto('pong'.encode(),clientAddress)
+    try:
+        pingMessage, clientAddress = localSocket.recvfrom(1024)
+        if pingMessage.decode() == 'ping':
+            localSocket.sendto('pong'.encode(),clientAddress)
+    except:
+        continue
