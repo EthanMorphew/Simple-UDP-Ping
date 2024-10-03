@@ -8,7 +8,7 @@ import time
 import argparse
 
 # Argument flags setup
-parser =  argparse.ArgumentParser(prog='Ponger', description='Responds to UDP messages from pinger')
+parser =  argparse.ArgumentParser(prog='ponger.py', description='Responds to UDP messages from pinger')
 parser.add_argument("-d", "--delay", help = "Introduce random response delay", default = False, action='store_true')
 parser.add_argument("-f", "--failures", help = "Introduce random response failures/drops", default = False, action='store_true')
 args = parser.parse_args()

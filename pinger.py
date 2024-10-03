@@ -6,8 +6,8 @@ import socket
 import time
 import argparse
 
-parser =  argparse.ArgumentParser(prog='Pinger', description='Sends UDP messages to ponger')
-parser.add_argument("-b", "--delay", help = "Introduce random response delay", default = False, action='store_true')
+parser =  argparse.ArgumentParser(prog='pinger.py', description='Sends UDP messages to ponger')
+parser.add_argument("-b", "--backoff", help = "Exponentialy increase timeout if packet is not received", default = False, action='store_true')
 args = parser.parse_args()
 
 #Remote Addressd
@@ -16,22 +16,23 @@ remoteIP = "localhost"
 remoteAddress = (remoteIP,remotePort)
 
 #Ping Settings
-pingTimout = 2
-pingRepeats = 20
+pingTimeout = 2
+pingRepeats = 10
 
-pingBackoff = False
+pingBackoff = args.backoff
 
 #Socket Setup
 remoteSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 #Stats
 pingSuccesses = 0
+returnTimes = []
 
 print("Pinging " + remoteAddress[0] + ":" + str(remoteAddress[1]) + " " + str(pingRepeats) + " times")
 
 #Loops through sending udp "ping" messages 
 for i in range(pingRepeats):
-   remoteSocket.settimeout(pingTimout)
+   remoteSocket.settimeout(pingTimeout)
    remoteSocket.sendto(("ping," + str(i)).encode(),remoteAddress)
    sendTime = time.time()
    # Loops until correct ping seq is received or timeout occurs
@@ -44,14 +45,22 @@ for i in range(pingRepeats):
          if pongMessage[0] == "pong" and pongMessage[1] == str(i):
             pingSuccesses += 1
             rtt = int((recvTime - sendTime) * 1000)
+            returnTimes.append(rtt)
             print(str(i) + ": Pong " + pongMessage[1] + " Received From " + recvAddress[0] + " RTT: " + str(rtt) + "ms")
             break
          #Received a ping with wrong seq number or garbage message, adjust timeout window and continue.
          else:
-            remoteSocket.settimeout(pingTimout - (recvTime - sendTime))
+            remoteSocket.settimeout(pingTimeout - (recvTime - sendTime))
       #if socket timeout triggered we are over the time limit and move on to the next packet.
       except socket.timeout:
          print(str(i) + ": Request Timed Out")
+         # If timeout occurs icrease timeout duration
+         if pingBackoff:
+            pingTimeout = pingTimeout * pingTimeout
          break
-
-print("Ping Success: " + str(pingSuccesses/pingRepeats * 100) + "%")
+#Calculate Statistics
+avgRtt = round(sum(returnTimes)/len(returnTimes))
+minRtt = min(returnTimes)
+maxRtt = max(returnTimes)
+print("Average RTT: " + str(avgRtt) + "ms Max RTT: " + str(maxRtt) + "ms Min RTT:" + str(minRtt) + "ms")
+print("Loss Rate: " + str(100 - (pingSuccesses/pingRepeats * 100)) + "%")
