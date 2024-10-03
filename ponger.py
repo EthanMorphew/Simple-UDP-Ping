@@ -15,7 +15,7 @@ args = parser.parse_args()
 
 
 localPort = 50555
-localIP = 'localhost'
+localIP = '0.0.0.0'
 
 localSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 localSocket.bind((localIP, localPort))
