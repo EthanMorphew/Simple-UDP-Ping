@@ -4,16 +4,20 @@
 
 import socket
 import time
-import sys
+import argparse
 
-#Remote Address
+parser =  argparse.ArgumentParser(prog='Pinger', description='Sends UDP messages to ponger')
+parser.add_argument("-b", "--delay", help = "Introduce random response delay", default = False, action='store_true')
+args = parser.parse_args()
+
+#Remote Addressd
 remotePort = 50555
 remoteIP = "localhost"
 remoteAddress = (remoteIP,remotePort)
 
 #Ping Settings
 pingTimout = 2
-pingRepeats = 10
+pingRepeats = 20
 
 pingBackoff = False
 
