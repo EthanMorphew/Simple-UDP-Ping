@@ -28,8 +28,8 @@ print("Pinging " + remoteAddress[0] + ":" + str(remoteAddress[1]) + " " + str(pi
 #Loops through sending udp "ping" messages 
 for i in range(pingRepeats):
    remoteSocket.settimeout(pingTimout)
-   sendTime = time.time()
    remoteSocket.sendto(("ping," + str(i)).encode(),remoteAddress)
+   sendTime = time.time()
    # Loops until correct ping seq is received or timeout occurs
    while True:
       try:

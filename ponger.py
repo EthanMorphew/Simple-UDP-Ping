@@ -23,7 +23,9 @@ while True:
 
         if randomDelay:
             time.sleep((random.random() * 0.4) + 0.1)
-
+        if randomDrops:
+            if random.randint(1,5) >= 4:
+                break
         pingMessage = data.decode().split(',')
         if pingMessage[0] == 'ping':
             localSocket.sendto(('pong,'+ str(pingMessage[1])).encode(),clientAddress)
