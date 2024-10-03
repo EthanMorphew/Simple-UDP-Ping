@@ -17,7 +17,9 @@ while True:
         data, clientAddress = localSocket.recvfrom(1024)
         pingMessage = data.decode().split(',')
         if pingMessage[0] == 'ping':
-            time.sleep(random.randint(0,3))
+            randSleep = random.random()*3
+            print(randSleep)
+            time.sleep(randSleep)
             localSocket.sendto(('pong,'+ str(pingMessage[1])).encode(),clientAddress)
     except:
         continue
