@@ -12,7 +12,7 @@ args = parser.parse_args()
 
 #Remote Addressd
 remotePort = 50555
-remoteIP = "localhost"
+remoteIP = "10.0.0.2"
 remoteAddress = (remoteIP,remotePort)
 
 #Ping Settings
@@ -59,8 +59,9 @@ for i in range(pingRepeats):
             pingTimeout = pingTimeout * pingTimeout
          break
 #Calculate Statistics
-avgRtt = round(sum(returnTimes)/len(returnTimes))
-minRtt = min(returnTimes)
-maxRtt = max(returnTimes)
-print("Average RTT: " + str(avgRtt) + "ms Max RTT: " + str(maxRtt) + "ms Min RTT:" + str(minRtt) + "ms")
+if(len(returnTimes) > 0):
+   avgRtt = round(sum(returnTimes)/len(returnTimes))
+   minRtt = min(returnTimes)
+   maxRtt = max(returnTimes)
+   print("Average RTT: " + str(avgRtt) + "ms Max RTT: " + str(maxRtt) + "ms Min RTT:" + str(minRtt) + "ms")
 print("Loss Rate: " + str(100 - (pingSuccesses/pingRepeats * 100)) + "%")
