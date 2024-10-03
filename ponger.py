@@ -3,6 +3,8 @@
 # Ping Responder (Ponger)
 
 import socket
+import random
+import time
 
 localPort = 50555
 localIP = 'localhost'
@@ -12,8 +14,10 @@ localSocket.bind((localIP, localPort))
 
 while True:
     try:
-        pingMessage, clientAddress = localSocket.recvfrom(1024)
-        if pingMessage.decode() == 'ping':
-            localSocket.sendto('pong'.encode(),clientAddress)
+        data, clientAddress = localSocket.recvfrom(1024)
+        pingMessage = data.decode().split(',')
+        if pingMessage[0] == 'ping':
+            time.sleep(random.randint(0,3))
+            localSocket.sendto(('pong,'+ str(pingMessage[1])).encode(),clientAddress)
     except:
         continue
