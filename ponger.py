@@ -14,8 +14,8 @@ parser.add_argument("-f", "--failures", help = "Introduce random response failur
 args = parser.parse_args()
 
 
-localPort = 50555
-localIP = '0.0.0.0'
+localPort = 50555 # Can be changed
+localIP = '0.0.0.0' # Binds to all local IPs -> Can be changed
 
 localSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 localSocket.bind((localIP, localPort))

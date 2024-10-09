@@ -10,9 +10,9 @@ parser =  argparse.ArgumentParser(prog='pinger.py', description='Sends UDP messa
 parser.add_argument("-b", "--backoff", help = "Exponentialy increase timeout if packet is not received", default = False, action='store_true')
 args = parser.parse_args()
 
-#Remote Addressd
-remotePort = 50555
-remoteIP = "10.0.0.2"
+#Remote Addresses
+remotePort = 50555  #Change to test
+remoteIP = "10.0.0.2" #Change to test
 remoteAddress = (remoteIP,remotePort)
 
 #Ping Settings
